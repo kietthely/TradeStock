@@ -7,7 +7,8 @@ public class ListedCompany {
 	 */
 	private String name;
 	
-	public void getName() {
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -15,7 +16,8 @@ public class ListedCompany {
 	 */
 	private String code;
 	
-	public void getCode() {
+	public String getCode() {
+		return code;
 	}
 
 	/**
@@ -23,13 +25,27 @@ public class ListedCompany {
 	 */
 	private int currentPrice;
 	
-	public void getCurrentPrice() {
+	public int getCurrentPrice() {
+		return currentPrice;
 	}
 	
 	public ListedCompany(String code, String name, int currentPrice)
 	{
+		this.name = name;
+		this.code = code;
+		this.currentPrice = currentPrice;
 	}
-	
+	/**
+	 * Set the currentPrice but cannot go below 1 in price.
+	 * @param price
+	 */
+	public void setCurrentPrice(int price) {
+		if (price > 1)
+			currentPrice += price;
+		else
+			currentPrice = 1;
+		
+	}
 	/**
 	 * Processing a trade should increase the current price of the company by 
 	 *    quantity / 100
@@ -40,5 +56,12 @@ public class ListedCompany {
 	 */
 	public void processTrade(int quantity)
 	{
+		int price = 1;
+		// sell
+		if (quantity > 0)
+			price = (int) quantity/100;
+		else 
+			price = - (int) quantity/100;
+		setCurrentPrice(price);
 	}
 }

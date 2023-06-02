@@ -5,6 +5,7 @@ package unisa.dse.a2.interfaces;
  *
  */
 public interface List {
+	
 		
 	/**
 	 * Inserts the specified element at the specified position in this list. 
