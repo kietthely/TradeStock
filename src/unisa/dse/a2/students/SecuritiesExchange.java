@@ -13,6 +13,7 @@ public class SecuritiesExchange {
 	private String name;
 	
 	public String getName() {
+		return name;
 	}
 	
 	/**
@@ -36,6 +37,7 @@ public class SecuritiesExchange {
 	 */
 	public SecuritiesExchange(String name)
 	{
+		this.name = name;
 	}
 	
 	/**
@@ -45,6 +47,9 @@ public class SecuritiesExchange {
 	 */
 	public boolean addCompany(ListedCompany company)
 	{
+		int prevSize = companies.size();
+		companies.put(company.getName(), company);
+		return companies.size() != prevSize;
 	}
 
 	/**
@@ -53,6 +58,9 @@ public class SecuritiesExchange {
 	 */
 	public boolean addBroker(StockBroker broker)
 	{
+		int prevSize = this.brokers.size();
+		this.brokers.add(broker);
+		return this.brokers.size() != prevSize;
 	}
 	
 	/**
@@ -73,6 +81,7 @@ public class SecuritiesExchange {
 	 */
 	public int processTradeRound()
 	{
+		
 	}
 	
 	public int runCommandLineExchange(Scanner sc)
