@@ -12,8 +12,9 @@ public class Trade implements Comparable<Trade> {
 	/**
 	 * @return Track the moment in time this Trade was created
 	 */
-	public void getCreated()
+	public long getCreated()
 	{
+		return created;
 	}
 	
 	public String listedCompanyCode;
@@ -21,7 +22,8 @@ public class Trade implements Comparable<Trade> {
 	/**
 	 * @return The company's code
 	 */
-	public void getCompanyCode() {
+	public String getCompanyCode() {
+		return listedCompanyCode;
 	}
 	
 	private int shareQuantity;
@@ -29,7 +31,8 @@ public class Trade implements Comparable<Trade> {
 	/**
 	 * @return The quantity of shares to trade
 	 */
-	public void getShareQuantity() {
+	public int getShareQuantity() {
+		return shareQuantity;
 	}
 
 	private StockBroker broker;
@@ -37,7 +40,8 @@ public class Trade implements Comparable<Trade> {
 	/**
 	 * @return The broker associated with this trade
 	 */
-	public void getStockBroker() {
+	public StockBroker getStockBroker() {
+		return broker;
 	}
 
 
@@ -48,7 +52,9 @@ public class Trade implements Comparable<Trade> {
 	{
 		created = System.nanoTime(); //do not change this
 		tradeId = id; //do not change this
-		try { Thread.sleep(100); } catch (Exception x) {}
+		try { Thread.sleep(100); } catch (Exception x) {
+			
+		}
 	}
 	
 	/***
@@ -63,7 +69,11 @@ public class Trade implements Comparable<Trade> {
 	{
 		created = System.nanoTime(); //do not change this
 		tradeId = System.nanoTime(); //do not change this
-		try { Thread.sleep(100); } catch (Exception x) {}
+		try { Thread.sleep(100); } catch (Exception x) {
+			this.broker = broker;
+			this.listedCompanyCode = listedCompanyCode;
+			this.shareQuantity = shareQuantity;
+		}
 	}
 	
 	/**
@@ -81,6 +91,31 @@ public class Trade implements Comparable<Trade> {
 	 */
 	public int compareTo(Trade t)
 	{
+		int out = 0;
+		String otherCompany = t.getCompanyCode();
+		StockBroker otherBroker = t.getStockBroker();
+		DSEListGeneric<String> otherWatchList = otherBroker.getWatchlist();
+		DSEListGeneric<String> currentWatchList = this.broker.getWatchlist();
+		// both on their watchlists
+		if (currentWatchList.contains(otherCompany) && otherWatchList.contains(getCompanyCode())) {
+			out = 0;
+		//currentWatchList is, but otherWatchList is not
+		}else if (currentWatchList.contains(otherWatchList) && !otherWatchList.contains(otherCompany)) {
+			out = 1;
+		// otherWatchList is, but currentWatchList is not
+		} else if (otherWatchList.contains(getCompanyCode()) && !currentWatchList.contains(getCompanyCode())) {
+			out = -1;
+		} else {
+			if (this.getCreated() < t.getCreated()) {
+				out = -1;
+			} else if (this.getCreated() == t.getCreated()){
+				out = 0;
+			} else {
+				out = 1;
+			}
+		}
+		return out;
+		
 	}
 	
 
