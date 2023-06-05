@@ -28,11 +28,11 @@ public class DSEListGeneric<T> implements ListGeneric {
 			return;
 		}
 		NodeGeneric<T> current = other.head;
-		NodeGeneric<T> headNode = new NodeGeneric(null, null ,new String (current.getString()));
+		NodeGeneric<T> headNode = new NodeGeneric(null, null , current.get());
 		NodeGeneric<T> currCopiedNode = headNode;
 		while (current.next != null) {
 			current = current.next;
-			NodeGeneric<T> newChildNode = new NodeGeneric(null, null, new String (current.getString()));
+			NodeGeneric<T> newChildNode = new NodeGeneric(null, null, current.get());
 			currCopiedNode.next = newChildNode;
 			currCopiedNode = currCopiedNode.next;
 			size +=1;
