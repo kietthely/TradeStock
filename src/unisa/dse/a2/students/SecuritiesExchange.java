@@ -79,13 +79,40 @@ public class SecuritiesExchange {
 	 * @return The number of successful trades completed across all brokers
 	 * @throws UntradedCompanyException when traded company is not listed on this exchange
 	 */
-	public int processTradeRound()
+	public int processTradeRound() throws UntradedCompanyException
 	{
+		if (brokers == null) {
+			return 0;
+		}
+		// pseudo
+		int count = 0;
+		/**
+		 * Get brokers. retrieve 3 if possible. Or 2, 1 broker(s).
+		 * Broker 1, 2, 3.
+		 * Retrieve trade from brokers. getNextTrade().
+		 * Trade 1, 2, 3
+		 * CompareTo to sort the order of the trades.
+		 * i.e Trade: 3, 1, 2
+		 * Then process trade: Retrieve companyCode e.g 3.getCompanyCode().
+		 * code3, code1, code2.
+		 * quantity3, quantity1, quantity2
+		 * Retrieve ListedCompany
+		 * throw UntradedCompanyException
+		 * company3, company1, company2.
+		 * announcement.add("Trade: " + quantity3 + " " + code3 + " @ " + company3.getCurrentPrice() + " via " + broker3.getName())
+		 * processTrade(getShareQuantity()).
+		 * count += 1
+		 * 
+		 */
+
 		
+
+
+		return count;
 	}
 	
 	public int runCommandLineExchange(Scanner sc)
 	{
-		
+		return 0;
 	}
 }

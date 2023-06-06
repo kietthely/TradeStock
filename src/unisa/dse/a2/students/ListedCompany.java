@@ -29,6 +29,12 @@ public class ListedCompany {
 		return currentPrice;
 	}
 	
+	/**
+	 * 
+	 * @param code: company code
+	 * @param name: company name
+	 * @param currentPrice: current price of the company after traded
+	 */
 	public ListedCompany(String code, String name, int currentPrice)
 	{
 		this.name = name;
