@@ -91,8 +91,6 @@ public class SecuritiesExchange {
 		 * Broker 1, 2, 3.
 		 * Retrieve trade from brokers. getNextTrade().
 		 * Trade 1, 2, 3
-		 * CompareTo to sort the order of the trades.
-		 * i.e Trade: 3, 1, 2
 		 * Then process trade: Retrieve companyCode e.g 3.getCompanyCode().
 		 * code3, code1, code2.
 		 * quantity3, quantity1, quantity2
@@ -104,6 +102,40 @@ public class SecuritiesExchange {
 		 * count += 1
 		 * 
 		 */
+		
+		/**
+		 * brokers = {[size3], [size 2], [size5], [size 3], [size4]}
+
+			processing_brokers = [size3], [size2], [size5]
+			processing_trades = [trade1], [trade1], [trade1]
+					process_trade()
+			[trade2], [trade2], [trade2]
+			process_trade()
+			
+			processing_brokers = [size1], [size3], [size3]
+			
+			processing_trades = [trade1], [trade1], [trade1]
+			process_trade()
+
+		 */
+		// handle 1 trade
+		for (int i = 0; i < brokers.size(); i++) {
+			StockBroker fBroker = brokers.get(i);
+			Trade trade = fBroker.getNextTrade();
+			
+			if(trade != null) {
+				String fCode = trade.getCompanyCode();
+				int fQuantity = trade.getShareQuantity();
+				if(!companies.containsKey(fCode)) {
+					throw new UntradedCompanyException(fCode);
+					
+				} 
+				ListedCompany fCompany = companies.get(fCode);
+				announcements.add("Trade: " + fQuantity + " " + fCode + " @ " + fCompany.getCurrentPrice() + " via " + fBroker.getName());
+				fCompany.processTrade(trade.getShareQuantity());
+				count++;
+			}
+		}
 
 		
 
