@@ -6,7 +6,7 @@ import unisa.dse.a2.interfaces.ListGeneric;
  * @author simont
  *
  */
-public class DSEListGeneric<T> implements ListGeneric {
+public class DSEListGeneric<T> implements ListGeneric<T> {
 	
 	public NodeGeneric<T> head;
 	private NodeGeneric<T> tail;
@@ -28,11 +28,11 @@ public class DSEListGeneric<T> implements ListGeneric {
 			return;
 		}
 		NodeGeneric<T> current = other.head;
-		NodeGeneric<T> headNode = new NodeGeneric(null, null , current.get());
+		NodeGeneric<T> headNode = new NodeGeneric<T>(null, null , current.get());
 		NodeGeneric<T> currCopiedNode = headNode;
 		while (current.next != null) {
 			current = current.next;
-			NodeGeneric<T> newChildNode = new NodeGeneric(null, null, current.get());
+			NodeGeneric<T> newChildNode = new NodeGeneric<T>(null, null, current.get());
 			currCopiedNode.next = newChildNode;
 			currCopiedNode = currCopiedNode.next;
 			size +=1;
@@ -42,8 +42,11 @@ public class DSEListGeneric<T> implements ListGeneric {
 	}
 
 	//remove and return the item at the parameter's index
-	public Object remove(int index) {
-		Object data;
+	public T remove(int index) {
+		T data;
+		if (index < 0 || index >= size) {
+	        throw new IndexOutOfBoundsException("Invalid index: " + index);
+	    }
 		if (head == null)
         {
             return null;
@@ -59,10 +62,15 @@ public class DSEListGeneric<T> implements ListGeneric {
             if (current == head)
             {
                 head = current.next;
+                if(head != null) {
+                	head.prev = null;
+                }
             }
-            else if (current == null)
+            else if (current == tail)
             {
-                current = current.prev;
+            	
+                tail = current.prev;
+                tail.next = null;
             }
             else
             {
@@ -72,6 +80,7 @@ public class DSEListGeneric<T> implements ListGeneric {
              data =  current.get();
             //Delete the middle node
             current = null;
+            size --;
         }
 		return data;
 	}
@@ -98,8 +107,8 @@ public class DSEListGeneric<T> implements ListGeneric {
 	}
 	
 	//returns item at parameter's index
-	public Object get(int index) {
-		Object out = null;
+	public T get(int index) {
+		T out = null;
 		int i = 0;
 		if (index > size && index < 0) {
 			return out;
@@ -159,8 +168,8 @@ public class DSEListGeneric<T> implements ListGeneric {
 	}
 
 	//add the parameter item at of the end of the list
-	public boolean add(Object obj) {
-		NodeGeneric<T> newNode = new NodeGeneric(null,null, obj);
+	public boolean add(T obj) {
+		NodeGeneric<T> newNode = new NodeGeneric<T>(null,null, obj);
 		
 		size++;
 		
@@ -187,8 +196,8 @@ public class DSEListGeneric<T> implements ListGeneric {
 	}
 
 	//add item at parameter's index
-	public boolean add(int index, Object obj) {
-		NodeGeneric<T> newNode = new NodeGeneric(null, null, obj);
+	public boolean add(int index, T obj) {
+		NodeGeneric<T> newNode = new NodeGeneric<T>(null, null, obj);
 
 		size++;
 		
@@ -267,26 +276,32 @@ public class DSEListGeneric<T> implements ListGeneric {
 
 	@Override
 	public boolean equals(Object other) {
-		boolean isEqual = true;
+		boolean isEqual = false;
 		if (this == other)
 			return true;
 
 		// check if they are the same class
-		if (other == null || !(other instanceof DSEList)) {
+		if (other == null || !(other instanceof DSEListGeneric)) {
 			return false;
 		}
+		if(other instanceof DSEListGeneric) {
 		// check strings in the same order
-		NodeGeneric<T> t_current = this.head;
-		NodeGeneric<T> o_current = ((DSEListGeneric<T>) other).head;
-		while (t_current != null && o_current != null) {
-			if (!t_current.get().equals(o_current.get())) {
+		DSEListGeneric<?> otherList = (DSEListGeneric<?>) other;
+	    NodeGeneric<T> tCurrent = this.head;
+	    NodeGeneric<?> oCurrent = otherList.head;
+		 
+		while (tCurrent != null && oCurrent != null) {
+			if (!tCurrent.get().equals(oCurrent.get())) {
 				return false;
 			}
-			t_current = t_current.next;
-			o_current = o_current.next;
+			tCurrent = tCurrent.next;
+			oCurrent = oCurrent.next;
 		}
+		isEqual = tCurrent == null && oCurrent == null;
+		}
+		
 		// end of iteration
-		return t_current == null && o_current == null;
+		return isEqual;
 	}
 	
 }

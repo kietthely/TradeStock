@@ -1,6 +1,7 @@
 package unisa.dse.a2.students;
 
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 import unisa.dse.a2.interfaces.ListGeneric;
@@ -19,12 +20,12 @@ public class SecuritiesExchange {
 	/**
 	 * List of brokers on this exchange
 	 */
-	public ListGeneric<StockBroker> brokers;
+	public DSEListGeneric<StockBroker> brokers;
 	
 	/**
 	 * List of announcements of each trade processed
 	 */
-	public ListGeneric<String> announcements;
+	public DSEListGeneric<String> announcements;
 	
 	/**
 	 * HashMap storing the companies, stored based on their company code as the key
@@ -38,6 +39,9 @@ public class SecuritiesExchange {
 	public SecuritiesExchange(String name)
 	{
 		this.name = name;
+		brokers = new DSEListGeneric<StockBroker>();
+		announcements= new DSEListGeneric<String>();
+		companies = new HashMap<String,ListedCompany>();
 	}
 	
 	/**
@@ -84,44 +88,18 @@ public class SecuritiesExchange {
 		if (brokers == null) {
 			return 0;
 		}
-		// pseudo
+
 		int count = 0;
-		/**
-		 * Get brokers. retrieve 3 if possible. Or 2, 1 broker(s).
-		 * Broker 1, 2, 3.
-		 * Retrieve trade from brokers. getNextTrade().
-		 * Trade 1, 2, 3
-		 * Then process trade: Retrieve companyCode e.g 3.getCompanyCode().
-		 * code3, code1, code2.
-		 * quantity3, quantity1, quantity2
-		 * Retrieve ListedCompany
-		 * throw UntradedCompanyException
-		 * company3, company1, company2.
-		 * announcement.add("Trade: " + quantity3 + " " + code3 + " @ " + company3.getCurrentPrice() + " via " + broker3.getName())
-		 * processTrade(getShareQuantity()).
-		 * count += 1
-		 * 
-		 */
-		
-		/**
-		 * brokers = {[size3], [size 2], [size5], [size 3], [size4]}
 
-			processing_brokers = [size3], [size2], [size5]
-			processing_trades = [trade1], [trade1], [trade1]
-					process_trade()
-			[trade2], [trade2], [trade2]
-			process_trade()
-			
-			processing_brokers = [size1], [size3], [size3]
-			
-			processing_trades = [trade1], [trade1], [trade1]
-			process_trade()
 
-		 */
-		// handle 1 trade
-		for (int i = 0; i < brokers.size(); i++) {
-			StockBroker fBroker = brokers.get(i);
-			Trade trade = fBroker.getNextTrade();
+
+		for (int j = 0; j < brokers.size(); j++) {
+			StockBroker fBroker = brokers.get(j);
+			if (fBroker == null) {
+				throw new NullPointerException("Null StockBroker");
+			}
+			if (fBroker.getPendingTradeCount() > 0) {
+				Trade trade = fBroker.getNextTrade();
 			
 			if(trade != null) {
 				String fCode = trade.getCompanyCode();
@@ -135,14 +113,18 @@ public class SecuritiesExchange {
 				fCompany.processTrade(trade.getShareQuantity());
 				count++;
 			}
+			} else { // no pending trades available
+
+
+			
 		}
-
+		}
 		
-
-
+		
 		return count;
 	}
-	
+
+
 	public int runCommandLineExchange(Scanner sc)
 	{
 		return 0;

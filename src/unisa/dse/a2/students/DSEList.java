@@ -192,15 +192,20 @@ public class DSEList implements List {
 	}
 
 	//add String at parameter's index
-	public boolean add(int index, String obj) {
+	public boolean add(int index, String obj){
 		Node newNode = new Node(null, null, obj);
 
 		size++;
-		
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("the index is out of range");
+		}
+		// insert at head, O(1)
 		if (index == 0)
-		{
+		{	
+			if(head!= null) {
 			newNode.next = head;
 			head.prev = newNode;
+			}
 			head = newNode;
 			
 			if (tail == null)
@@ -210,7 +215,13 @@ public class DSEList implements List {
 			
 			return true;
 		}
-		
+		// insert at tail, O(1)
+		else if (index == size -1) {
+			newNode.prev = tail;
+			tail.next = newNode;
+			tail = newNode;
+			return true;
+		}
 		int i = 1;
 		
 		Node temp = head.next;
@@ -219,7 +230,7 @@ public class DSEList implements List {
 			temp = temp.next;
 			i++;
 		}
-
+		
 
 		newNode.next = temp;
 		newNode.prev = temp.prev;
