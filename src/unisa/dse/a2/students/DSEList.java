@@ -48,8 +48,12 @@ public class DSEList implements List {
 		String data = "";
 		if (head == null)
         {
-            return "Nothing to remove";
+            throw new NullPointerException("No data at this index");
         }
+		
+		else if(index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("Index out of bound!");
+		}
         else
         {
             Node current = head;
@@ -62,9 +66,9 @@ public class DSEList implements List {
             {
                 head = current.next;
             }
-            else if (current == null)
+            else if (current == tail)
             {
-                current = current.prev;
+                tail = current.prev;
             }
             else
             {
@@ -80,64 +84,54 @@ public class DSEList implements List {
 
 	//returns the index of the String parameter 
 	public int indexOf(String obj) {
-		boolean found= false;
+		if (obj == null) {
+			throw new NullPointerException("Null Object");
+		}
 		Node current = head;
 		int index = 0;
-		if (current.getString().equals(obj))
-			return index;
-		while (current.next != null && !current.getString().equals(obj)) {
-			current = current.next;
-			if (current.getString().equals(obj)) {
-				found = true;
-			}
-			index ++;
-		}
-		if (found) {
-			return index;
-		}else {
-			return -1;
-		}
+		while (current != null) {
+	        if (current.getString().equals(obj)) {
+	            return index; 
+	        }
+	        
+	        current = current.next;
+	        index++;
+	    }
+		return -1;
 	}
 	
 	//returns String at parameter's index
 	public String get(int index) {
-		String out = "";
+		Node current = head;
+
+
 		int i = 0;
 		if (index > size && index < 0) {
-			return out;
+			throw new IndexOutOfBoundsException("Index out of bound!");
 		}
 		if (index == 0) {
-			out += head.getString();
+			return head.getString();
 		}
 		else if (index == size - 1) {
-			out += tail.getString();
+			return tail.getString();
 		}
 		else {
 			
-			Node current = head;
-			while (current.next != null && i < index) {
-				i++;
-				current = current.next;
+			
 
-				
-			}
-			if (current != null) {
-				out+= current.getString();
-			}
-		}
-		return out;
+		    while (i < index) {
+		        current = current.next;
+		        i++;
+		    }
+		    }
+
+	    return current.getString();
 
 	}
 
 	//checks if there is a list
 	public boolean isEmpty() {
-		boolean isEmpty = false;
-		if (head == null) {
-			isEmpty = true;
-		} else {
-			isEmpty = false;
-		}
-		return isEmpty;
+		return head == null;
 	}
 		
 
@@ -166,7 +160,9 @@ public class DSEList implements List {
 	//add the parameter String at of the end of the list
 	public boolean add(String obj) {
 		Node newNode = new Node(null,null, obj);
-		
+		if (obj == null) {
+			throw new NullPointerException("Null object");
+		}
 		size++;
 		
 		if (head == null)
@@ -194,7 +190,9 @@ public class DSEList implements List {
 	//add String at parameter's index
 	public boolean add(int index, String obj){
 		Node newNode = new Node(null, null, obj);
-
+		if (obj == null) {
+			throw new NullPointerException("Null object!");
+		}
 		size++;
 		if (index < 0 || index > size) {
 			throw new IndexOutOfBoundsException("the index is out of range");
@@ -241,36 +239,49 @@ public class DSEList implements List {
 
 	//searches list for parameter's String return true if found
 	public boolean contains(String obj) {
-		boolean found = false;
-	    Node current = head;
+		if (obj == null) {throw new NullPointerException("Null object");}
+		 Node current = head;
 
-	    while (!current.getString().equals(obj) 
-	               && current.next != null)
-	    {
+		    while (current != null) {
+		        if (current.getString().equals(obj)) {
+		            return true; 
 
-	      current = current.next;
-	    }
-	    found = current.getString().equals(obj);
+		        }
+		        current = current.next;
+		    }
 
-	    return found;
+		    return false;
 	}
 
 	//removes the parameter's String form the list
 	public boolean remove(String obj) {
-
+		if (obj == null) {
+			throw new NullPointerException("Null object!");
+		}
         if (head == null || obj == null)
             return false;
  
         Node current = head;
-        if (head.getString().equals(obj))
-            head = current.next;
- 
-        if (current.next != null)
-            current.next.prev = current.prev;
- 
-        if (current.prev != null)
-            current.prev.next = current.next;
+        while(current != null) {
+        	if (current.getString().equals(obj)) {
+                if (current == head) {
+                    head = current.next;
+                }
+                if (current == tail) {
+                    tail = current.prev;
+                }
+                if (current.next != null) {
+                    current.next.prev = current.prev;
+                }
+                if (current.prev != null) {
+                    current.prev.next = current.next;
+                }
+                return true;
+            }
+            current = current.next;
 
+        }
+        
 
  
         return true;

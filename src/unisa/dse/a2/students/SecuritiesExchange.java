@@ -85,40 +85,40 @@ public class SecuritiesExchange {
 	 */
 	public int processTradeRound() throws UntradedCompanyException
 	{
+		boolean pendingTrades = true;
 		if (brokers == null) {
 			return 0;
 		}
 
 		int count = 0;
-
-
-
-		for (int j = 0; j < brokers.size(); j++) {
-			StockBroker fBroker = brokers.get(j);
-			if (fBroker == null) {
-				throw new NullPointerException("Null StockBroker");
-			}
-			if (fBroker.getPendingTradeCount() > 0) {
-				Trade trade = fBroker.getNextTrade();
-			
-			if(trade != null) {
-				String fCode = trade.getCompanyCode();
-				int fQuantity = trade.getShareQuantity();
-				if(!companies.containsKey(fCode)) {
-					throw new UntradedCompanyException(fCode);
-					
+		while(pendingTrades) {
+			pendingTrades = false;
+			for (int j = 0; j < brokers.size(); j++) {
+				StockBroker fBroker = brokers.get(j);
+				if (fBroker == null) {
+					throw new NullPointerException("Null StockBroker");
+				}
+				if (fBroker.getPendingTradeCount() > 0) {
+					pendingTrades = true;
+					Trade trade = fBroker.getNextTrade();
+				
+					if(trade != null) {
+						String fCode = trade.getCompanyCode();
+						int fQuantity = trade.getShareQuantity();
+						if(!companies.containsKey(fCode)) {
+							throw new UntradedCompanyException(fCode);
+							
+						} 
+						ListedCompany fCompany = companies.get(fCode);
+						announcements.add("Trade: " + fQuantity + " " + fCode + " @ " + fCompany.getCurrentPrice() + " via " + fBroker.getName());
+						fCompany.processTrade(trade.getShareQuantity());
+						count++;
+					}
 				} 
-				ListedCompany fCompany = companies.get(fCode);
-				announcements.add("Trade: " + fQuantity + " " + fCode + " @ " + fCompany.getCurrentPrice() + " via " + fBroker.getName());
-				fCompany.processTrade(trade.getShareQuantity());
-				count++;
+
 			}
-			} else { // no pending trades available
-
-
-			
 		}
-		}
+		
 		
 		
 		return count;
