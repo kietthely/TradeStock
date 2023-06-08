@@ -12,33 +12,67 @@ public class DSEList implements List {
 	private Node tail;
 	private int size;
 	public DSEList() {
-		
+		head = null;
+		tail = null;
+		size = 0;
 	}
+	// insert by head node
 	public DSEList(Node head_) {
-		head = head_;
-		size += 1;
+		if(head_ == null) {
+			throw new NullPointerException("Empty node!");
+		}
+		// multiple nodes
+		if(head_.next != null) {
+			head = head_;
+			size = 1;
+		    Node current = head_;
+		    while (current.next != null) {
+		        size++;
+		        current = current.next;
+		    }
+		    tail = current;
+		} else {
+
+			head = head_;
+			tail = head_;
+			size += 1;	
+		}
 	}
 	
 	//Takes a list then adds each element into a new list
 	public DSEList(DSEList other) { // Copy constructor. 
+		size = 0;
 		if (other.head == null) {
 			head = null;
 			tail = null;
-			return;
+
 		}
-		Node current = other.head;
-		Node headNode = new Node(null, null ,new String (current.getString()));
-		Node currCopiedNode = headNode;
-		while (current.next != null) {
-			current = current.next;
-			Node newChildNode = new Node(null, null, new String (current.getString()));
-			currCopiedNode.next = newChildNode;
-			currCopiedNode = currCopiedNode.next;
-			size +=1;
+		else {
+			Node current = other.head;
+			Node headNode = new Node(null, null ,new String (current.getString()));
+			Node currCopiedNode = headNode;
+			if (other.size() == 1) { // if only 1 node
+				head = headNode;
+				tail = headNode;
+				size += 1;
+			}
+			else {
+				size +=1;
+				// multiple nodes
+				while (current.next != null) {
+					current = current.next;
+					Node newChildNode = new Node(null, currCopiedNode, new String (current.getString()));
+					currCopiedNode.next = newChildNode;
+					currCopiedNode = currCopiedNode.next;
+					size += 1;
+				}
+				head = headNode;
+				tail = currCopiedNode;
+			}
+		
+					
 		}
-		head = headNode;
-		tail = currCopiedNode;
-				
+		
 	}
 	
 	/**
@@ -78,6 +112,7 @@ public class DSEList implements List {
             data = current.getString();
             //Delete the middle node
             current = null;
+            size --;
         }
 		return data;
 	}
@@ -90,7 +125,7 @@ public class DSEList implements List {
 		Node current = head;
 		int index = 0;
 		while (current != null) {
-	        if (current.getString().equals(obj)) {
+	        if (current.getString().equals(obj.toString())) {
 	            return index; 
 	        }
 	        
@@ -106,24 +141,24 @@ public class DSEList implements List {
 
 
 		int i = 0;
-		if (index > size && index < 0) {
-			throw new IndexOutOfBoundsException("Index out of bound!");
+		if (index >= size || index < 0) {
+			return null;
 		}
+		// select head
 		if (index == 0) {
 			return head.getString();
-		}
+		} //select tail
 		else if (index == size - 1) {
 			return tail.getString();
 		}
 		else {
-			
-			
-
-		    while (i < index) {
+		    while (i != index) {
 		        current = current.next;
 		        i++;
 		    }
-		    }
+		}
+
+
 
 	    return current.getString();
 
@@ -144,13 +179,13 @@ public class DSEList implements List {
 	@Override
 	public String toString() {
 		String out = "";
-
-		Node temp = head.next;
-		out += " " + head.getString();
-		int i = 0;
-		while (i < size) {
+		if (head == null) {return "";}
+		Node temp = head;
+		out += " " + temp.getString();
+		int i = 1;
+		while (i < size && temp.next != null) {
 			temp = temp.next;
-			out+= temp.getString();
+			out += " "+ temp.getString();
 			i++;
 		}
 		return out.substring(1);
@@ -163,11 +198,11 @@ public class DSEList implements List {
 		if (obj == null) {
 			throw new NullPointerException("Null object");
 		}
-		size++;
 		
 		if (head == null)
 		{
 			head = tail = newNode;
+			size++;
 			return true;
 		}
 		
@@ -176,7 +211,6 @@ public class DSEList implements List {
 		{
 			temp = temp.next;
 		}
-		
 		temp.next = newNode;
 		newNode.prev = temp;
 		
@@ -184,6 +218,7 @@ public class DSEList implements List {
 		{
 			tail = newNode;
 		}
+		size++;
 		return true;
 	}
 
@@ -276,6 +311,7 @@ public class DSEList implements List {
                 if (current.prev != null) {
                     current.prev.next = current.next;
                 }
+                size --;
                 return true;
             }
             current = current.next;
@@ -294,7 +330,7 @@ public class DSEList implements List {
 
 	@Override
 	public boolean equals(Object other) {
-		boolean isEqual = true;
+
 		if (this == other)
 			return true;
 

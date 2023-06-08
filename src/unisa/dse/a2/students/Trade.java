@@ -69,10 +69,13 @@ public class Trade implements Comparable<Trade> {
 	{
 		created = System.nanoTime(); //do not change this
 		tradeId = System.nanoTime(); //do not change this
-		try { Thread.sleep(100); } catch (Exception x) {
-			this.broker = broker;
-			this.listedCompanyCode = listedCompanyCode;
-			this.shareQuantity = shareQuantity;
+		try { Thread.sleep(100); 
+		this.broker = broker;
+		this.listedCompanyCode = listedCompanyCode;
+		this.shareQuantity = shareQuantity;
+		
+		} catch (Exception x) {
+			
 		}
 	}
 	

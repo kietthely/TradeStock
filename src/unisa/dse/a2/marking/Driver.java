@@ -1,6 +1,8 @@
 package unisa.dse.a2.marking;
 
+import unisa.dse.a2.students.DSEList;
 import unisa.dse.a2.students.ListedCompany;
+import unisa.dse.a2.students.Node;
 import unisa.dse.a2.students.SecuritiesExchange;
 import unisa.dse.a2.students.StockBroker;
 import unisa.dse.a2.students.Trade;
@@ -11,8 +13,23 @@ public class Driver {
 	SecuritiesExchange exchange;
 
 	public static void main(String[] args) {
+		Node chain3;
+		//Driver d = new Driver();
 
-		Driver d = new Driver();
+		Node c31 = new Node(null, null, new String(""+1));
+		Node c32 = new Node(null, null, new String(""+2));
+		Node c33 = new Node(null, null, new String(""+3));
+
+		chain3 = c31;
+		c31.next = c32; c32.prev = c31;
+		c32.next = c33; c33.prev = c32;
+		DSEList s = new DSEList();
+		s = new DSEList(c31);
+		
+		System.out.println("-----");
+
+
+		System.out.println(s.toString());
 
 	}
 

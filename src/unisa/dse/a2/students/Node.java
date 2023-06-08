@@ -18,7 +18,12 @@ public class Node {
 	public Node prev;
 	
 	private String t;
-
+	/**
+	 * 
+	 * @param next node
+	 * @param prev node
+	 * @param token data
+	 */
 	public Node(Node next, Node prev, String token) {
 		this.next = next;
 		this.prev = prev;
