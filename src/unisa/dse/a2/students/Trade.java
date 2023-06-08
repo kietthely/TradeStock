@@ -96,17 +96,15 @@ public class Trade implements Comparable<Trade> {
 	{
 		int out = 0;
 		String otherCompany = t.getCompanyCode();
-		StockBroker otherBroker = t.getStockBroker();
-		DSEListGeneric<String> otherWatchList = otherBroker.getWatchlist();
 		DSEListGeneric<String> currentWatchList = this.broker.getWatchlist();
-		// both on their watchlists
-		if (currentWatchList.contains(otherCompany) && otherWatchList.contains(getCompanyCode())) {
+		// comparing itself
+		if (t.equals(this)) {
 			out = 0;
-		//currentWatchList is, but otherWatchList is not
-		}else if (currentWatchList.contains(getCompanyCode()) && !otherWatchList.contains(otherCompany)) {
+		// base trade is on watchlist
+		}else if (currentWatchList.contains(getCompanyCode())) {
 			out = 1;
-		// otherWatchList is, but currentWatchList is not
-		} else if (otherWatchList.contains(getCompanyCode()) && !currentWatchList.contains(getCompanyCode())) {
+		// other trade is on watchlist
+		} else if (currentWatchList.contains(otherCompany) ) {
 			out = -1;
 		} else {
 			if (this.getCreated() < t.getCreated()) {
