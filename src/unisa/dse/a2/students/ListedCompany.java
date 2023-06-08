@@ -46,10 +46,11 @@ public class ListedCompany {
 	 * @param price
 	 */
 	public void setCurrentPrice(int price) {
-		if (price > 1)
+		if (currentPrice + price > 1)
 			currentPrice += price;
-		else
+		else 
 			currentPrice = 1;
+			
 		
 	}
 	/**
@@ -62,12 +63,8 @@ public class ListedCompany {
 	 */
 	public void processTrade(int quantity)
 	{
-		int price = 1;
-		// sell
-		if (quantity > 0)
-			price = (int) quantity/100;
-		else 
-			price = - (int) quantity/100;
+		int price;
+		price = quantity/ 100;
 		setCurrentPrice(price);
 	}
 }

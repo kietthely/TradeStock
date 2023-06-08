@@ -103,7 +103,7 @@ public class Trade implements Comparable<Trade> {
 		if (currentWatchList.contains(otherCompany) && otherWatchList.contains(getCompanyCode())) {
 			out = 0;
 		//currentWatchList is, but otherWatchList is not
-		}else if (currentWatchList.contains(otherWatchList) && !otherWatchList.contains(otherCompany)) {
+		}else if (currentWatchList.contains(getCompanyCode()) && !otherWatchList.contains(otherCompany)) {
 			out = 1;
 		// otherWatchList is, but currentWatchList is not
 		} else if (otherWatchList.contains(getCompanyCode()) && !currentWatchList.contains(getCompanyCode())) {

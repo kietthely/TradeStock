@@ -330,7 +330,7 @@ public class DSEList implements List {
 
 	@Override
 	public boolean equals(Object other) {
-
+		boolean isEqual = false;
 		if (this == other)
 			return true;
 
@@ -338,18 +338,24 @@ public class DSEList implements List {
 		if (other == null || !(other instanceof DSEList)) {
 			return false;
 		}
-		// check strings in the same order
-		Node t_current = this.head;
-		Node o_current = ((DSEList) other).head;
-		while (t_current != null && o_current != null) {
-			if (!t_current.getString().equals(o_current.getString())) {
-				return false;
+		if(other instanceof DSEList) {
+			// check strings in the same order
+			DSEList otherList = (DSEList) other;
+		    Node tCurrent = this.head;
+		    Node oCurrent = otherList.head;
+			 
+			while (tCurrent != null && oCurrent != null) {
+				if (!tCurrent.getString().equals(oCurrent.getString())) {
+					return false;
+				}
+				tCurrent = tCurrent.next;
+				oCurrent = oCurrent.next;
 			}
-			t_current = t_current.next;
-			o_current = o_current.next;
+			isEqual = tCurrent == null && oCurrent == null;
 		}
+		
 		// end of iteration
-		return t_current == null && o_current == null;
+		return isEqual;
 	}
 	
 }
